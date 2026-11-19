@@ -5,3 +5,8 @@ dist/
 asset-inspection.png
 .data/
 .env.local
+
+.env
+.env.*
+!.env.example
+.vercel/

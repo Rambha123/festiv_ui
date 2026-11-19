@@ -19,7 +19,7 @@ npm start
 
 `npm run dev` and `npm run preview` include the shared-wish API. `npm start` serves the production build and API together (port 3000 by default). Keep one server process per data directory.
 
-**Shared wishes need persistent server storage.** Deploy the bundled Node server with `WISH_DATA_DIR` on a persistent volume, `HOST=0.0.0.0` behind HTTPS, and the appropriate `PORT`. Deploying `dist/` alone to static hosting or Vercel does not provide shared wishes. No hosting or remote database has been provisioned. See [shared wish operations](docs/wishes.md) for the API, persistence, backup, and hosting contract.
+**Shared wishes need persistent server storage.** Deploy the bundled Node server with `WISH_DATA_DIR` on a persistent volume, `HOST=0.0.0.0` behind HTTPS, and the appropriate `PORT`. Deploying `dist/` alone does not provide shared wishes. Vercel is now supported by deploying the repository with `api/wishes.js` and connecting Upstash Redis; see `docs/wishes.md`. No hosting or remote database has been provisioned. See [shared wish operations](docs/wishes.md) for the API, persistence, backup, and hosting contract.
 
 ## Motion and interactions
 
@@ -102,3 +102,11 @@ npm start
 ```
 
 Open http://127.0.0.1:3000. Wishes persist in `.data/wishes.json`; keep that file to retain them. Both modes use the same archive, so run only one at a time. Localhost is accessible on this computer only; public visitors need the persistent server deployment described in `docs/wishes.md`.
+
+
+## Vercel wish fix
+
+- [x] Added `/api/wishes` function and durable Redis adapter without new dependencies.
+- [x] Parsed request bodies, async storage, atomic publication and distributed cooldown supported.
+- [x] Missing database fails visibly; no ephemeral file fallback and no secrets in the browser.
+- [ ] Connect Upstash Redis to festiv-ui and redeploy, then verify live sharing. See [setup](docs/wishes.md#vercel-setup-for-festiv-ui).

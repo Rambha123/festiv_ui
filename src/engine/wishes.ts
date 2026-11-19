@@ -12,6 +12,9 @@ function isWish(value: unknown): value is SharedWish {
 
 async function request(init: RequestInit, signal: AbortSignal): Promise<Record<string, unknown>> {
   const response = await fetch(endpoint, { ...init, signal, cache: "no-store", credentials: "same-origin" });
+  if (!response.headers.get("content-type")?.includes("application/json")) {
+    throw new Error("Shared wishes are unavailable on this deployment. Please try again after the site is updated.");
+  }
   const data: unknown = await response.json();
   if (!data || typeof data !== "object") throw new Error("The wish garden returned an unreadable response.");
   const result = data as Record<string, unknown>;

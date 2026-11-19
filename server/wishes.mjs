@@ -68,14 +68,14 @@ function respond(res, status, payload, extra = {}) {
   res.end(JSON.stringify(payload));
 }
 
-export function createWishApi({ store = createWishStore(), now = Date.now } = {}) {
+export function createWishApi({ store = createWishStore(), now = Date.now, clientAddress = (req) => req.socket?.remoteAddress || "unknown" } = {}) {
   const recent = new Map();
   return async (req, res, next) => {
     const path = req.url?.split("?")[0];
     if (path !== "/api/wishes") { next(); return; }
     try {
       if (req.method === "GET") {
-        respond(res, 200, { wishes: store.list() });
+        respond(res, 200, { wishes: await store.list() });
         return;
       }
       if (req.method !== "POST") {
@@ -91,25 +91,34 @@ export function createWishApi({ store = createWishStore(), now = Date.now } = {}
         respond(res, 415, { error: "Send the wish as JSON." });
         return;
       }
-      const chunks = [];
-      let size = 0;
-      for await (const chunk of req) {
-        size += chunk.length;
-        if (size > 8192) {
-          respond(res, 413, { error: "Keep your wish within 300 characters." });
-          return;
+      let body = req.body;
+      if (body !== undefined) {
+        if (Buffer.byteLength(typeof body === "string" ? body : JSON.stringify(body), "utf8") > 8192) {
+          respond(res, 413, { error: "Keep your wish within 300 characters." }); return;
         }
-        chunks.push(chunk);
+        if (typeof body === "string") {
+          try { body = JSON.parse(body); }
+          catch { respond(res, 400, { error: "The wish could not be read. Please try again." }); return; }
+        }
+      } else {
+        const chunks = [];
+        let size = 0;
+        for await (const chunk of req) {
+          size += chunk.length;
+          if (size > 8192) {
+            respond(res, 413, { error: "Keep your wish within 300 characters." }); return;
+          }
+          chunks.push(chunk);
+        }
+        try { body = JSON.parse(Buffer.concat(chunks).toString("utf8")); }
+        catch { respond(res, 400, { error: "The wish could not be read. Please try again." }); return; }
       }
-      let body;
-      try { body = JSON.parse(Buffer.concat(chunks).toString("utf8")); }
-      catch { respond(res, 400, { error: "The wish could not be read. Please try again." }); return; }
       const text = validateWish(body?.text);
       if (!text || typeof body?.requestId !== "string" || !UUID.test(body.requestId)) {
         respond(res, 400, { error: "Write a wish between 1 and 300 characters." });
         return;
       }
-      const existing = store.find(body.requestId);
+      const existing = await store.find(body.requestId);
       if (existing) {
         if (existing.text !== text) respond(res, 409, { error: "This wish was already shared. Start a new wish." });
         else respond(res, 200, { wish: existing });
@@ -117,15 +126,21 @@ export function createWishApi({ store = createWishStore(), now = Date.now } = {}
       }
       const time = now();
       for (const [key, until] of recent) if (until <= time) recent.delete(key);
-      const address = req.socket.remoteAddress || "unknown";
+      const address = clientAddress(req);
       if (recent.has(address) || recent.size >= 10000) {
         respond(res, 429, { error: "Let this light settle. Try again in 15 seconds." }, { "Retry-After": "15" });
         return;
       }
-      const wish = store.add(text, body.requestId);
+      const wish = await store.add(text, body.requestId, address);
       recent.set(address, time + 15000);
       respond(res, 201, { wish });
     } catch (error) {
+      if (error.code === "WISH_RATE_LIMIT") {
+        respond(res, 429, { error: "Let this light settle. Try again in 15 seconds." }, { "Retry-After": "15" }); return;
+      }
+      if (error.code === "WISH_CONFLICT") {
+        respond(res, 409, { error: "This wish was already shared. Start a new wish." }); return;
+      }
       console.error("[PRAKASH] Wish storage request failed.", error instanceof Error ? error.name : "Unknown error");
       if (!res.headersSent) respond(res, 503, { error: "The wish garden is unavailable. Your draft is safe; please retry shortly." });
       else res.end();
