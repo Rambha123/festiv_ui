@@ -26,7 +26,7 @@ npm start
 - One native document scroll track and a scoped GSAP ScrollTrigger timeline. Scroll moves forward; reverse scrolling restores the same camera, darkness and text transitions. No wheel interception, scroll lock, frame canvas, JPEG loading or auto-advancing chapters.
 - The opening starts black. Ignition reveals the original `Extinguished Diyas Beneath Temple Lights-1.png` over 4.6 seconds. Four additional alley lamps progressively remove the remaining darkness until the artwork reaches normal brightness; there is no permanent brightness filter.
 - The courtyard has a slow scroll push plus damped cursor movement. Five lamps and three cultural details are semantic, artwork-aligned hotspots. Selecting one eases the camera toward that object and opens its story beside it. Closing pulls back; changing chapters dismisses inspection. Small hover/focus labels replace the old rectangular button groups.
-- Portrait views retain object alignment. Horizontal touch exploration reveals cropped courtyard details while vertical scrolling stays native. Keyboard focus brings an offscreen hotspot into view. System reduced motion disables automatic drift and zoom; it can also be toggled in Chapters.
+- Portrait views retain object alignment. Horizontal touch exploration reveals cropped courtyard details while vertical scrolling stays native. Keyboard focus brings an offscreen hotspot into view. Reduced motion is permanently off, as requested. Full camera movement, cursor drift and zoom remain enabled across reloads and replay; there is no motion toggle.
 - Long perspective changes pass through a soft dark veil. Every narrative line has its own scroll entrance, reading interval and exit. The gateway explicitly describes the passage between distinct Tihar and Chhath festivals.
 - Later river artwork preloads as the preceding chapters are reached. Image and wish failures show retry feedback. GSAP contexts, observers, event handlers and animation frames are cleaned up.
 
@@ -75,3 +75,30 @@ The full original product spec also calls for separately illustrated depth layer
 - [x] All five stars remain available on mobile; keyboard labels and reduced-motion behavior are retained.
 - [x] Typecheck, lint, 29 tests and production build pass.
 - [ ] Visual verification of this refinement remains outstanding; no browser-control tool is available in this session.
+
+
+## November 19 motion setting
+
+- [x] Reduced motion is always off, regardless of operating-system preferences or replay.
+- [x] Removed the Chapters motion toggle.
+
+### Windows quick start
+
+Open PowerShell in the project folder, then run:
+
+```powershell
+cd C:\Users\HELIOS\Desktop\prakash\prakash
+npm ci
+npm run dev
+```
+
+Open the Local URL printed in the terminal (normally http://127.0.0.1:5173). This one command runs both the website and shared-wish API; no separate backend command is needed. Keep the terminal running. Press Ctrl+C to stop it.
+
+To run the production version instead, stop development first, then run:
+
+```powershell
+npm run build
+npm start
+```
+
+Open http://127.0.0.1:3000. Wishes persist in `.data/wishes.json`; keep that file to retain them. Both modes use the same archive, so run only one at a time. Localhost is accessible on this computer only; public visitors need the persistent server deployment described in `docs/wishes.md`.

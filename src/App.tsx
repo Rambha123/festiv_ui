@@ -25,7 +25,7 @@ export default function App() {
   const [selectedWish, setSelectedWish] = useState<SharedWish | null>(null);
   const [map, setMap] = useState(false);
   const [debug, setDebug] = useState(false);
-  const { reduced, toggleMotion, resetMotion } = useReducedMotion();
+  const { reduced } = useReducedMotion();
   const loading = useAssets(furthest);
   const { lit, language, setLanguage, discover, replay, storageError } = useJourney();
   const ignited = lit.includes("first");
@@ -67,7 +67,6 @@ export default function App() {
   const restart = () => {
     jump(0);
     replay();
-    resetMotion();
     setPanel(null);
     setWishOpen(false);
   };
@@ -110,7 +109,6 @@ export default function App() {
             <span>0{index + 1}</span>{ne ? item.ne : item.name}
           </button>)}
           <button onClick={restart}>{ne ? "फेरि सुरु गर्नुहोस्" : "Replay opening"}</button>
-          <button onClick={toggleMotion} aria-pressed={reduced}>{ne ? "कम गति" : "Reduced motion"}: {reduced ? (ne ? "चालु" : "on") : (ne ? "बन्द" : "off")}</button>
         </nav>}
         <section className="opening" inert={chapter !== 0} aria-label={ne ? "पहिलो ज्योति" : "The first spark"}>
           <div className="intro-scroll">
