@@ -1,0 +1,45 @@
+.distant-wishes {
+  position: absolute;
+  inset: 17% 7% 45%;
+  z-index: 5;
+  pointer-events: none;
+  color: #fff0d4;
+}
+.wishes-caption { text-align: center; font-size: 10px; letter-spacing: .17em; text-transform: uppercase; text-shadow: 0 1px 8px #080c19; }
+.wish-lights { list-style: none; padding: 0; margin: 0; }
+.wish-light { position: absolute; width: clamp(125px, 16vw, 220px); transform: translate(-50%, -50%); }
+.wish-light-1 { left: 18%; top: 58%; }
+.wish-light-2 { left: 42%; top: 30%; }
+.wish-light-3 { left: 73%; top: 45%; }
+.wish-light-4 { left: 33%; top: 88%; }
+.wish-light-5 { left: 86%; top: 90%; }
+.wish-light button { pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 10px; color: #fff3df; border: 0; background: transparent; text-shadow: 0 1px 5px #080c19, 0 2px 18px #080c19; }
+.wish-light-flame { position: relative; width: 7px; height: 7px; border-radius: 50%; background: #fff9db; box-shadow: 0 0 7px 2px #fff3c9, 0 0 20px 6px #ffc46b88, 0 0 38px 10px #ffc46b33; animation: star-breathe 4s ease-in-out infinite; }
+.wish-light-flame::before, .wish-light-flame::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: linear-gradient(transparent, #fff7dc, transparent); border-radius: 50%; width: 2px; height: 22px; }
+.wish-light-flame::after { transform: translate(-50%, -50%) rotate(90deg); height: 18px; }
+.wish-light button:hover, .wish-light button:focus-visible, .wish-light button.wish-light-open { background: transparent !important; }
+.wish-light button:focus-visible { outline: 1px solid #ffc46b; outline-offset: 4px; }
+.wish-light button { width: 48px; height: 48px; padding: 0; justify-content: center; border-radius: 50%; }
+.wish-light { width: 48px; }
+.wish-light-open .wish-light-flame { scale: 1.8; }
+.wish-light-flame { transition: scale .7s ease; }
+.wish-light:nth-child(even) .wish-light-flame { animation-delay: -2s; }
+@keyframes star-breathe { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .wish-light-flame { animation: none; transition: none; } }
+.wish-garden-status { position: absolute; left: 50%; top: 45%; transform: translateX(-50%); width: min(90%, 380px); text-align: center; padding: 10px; background: #080c1988; font-size: 12px; }
+.wish-garden-status button { pointer-events: auto; min-height: 44px; margin-left: 8px; }
+.wish-publish-note { font: 12px/1.6 sans-serif !important; opacity: .85; }
+.wish-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.wish-actions button { min-height: 44px; flex: 1 1 140px; }
+.wish-published { color: #ffd896; font-size: 13px; }
+@media (max-width: 600px) {
+  .distant-wishes { inset: 15% 5% 48%; }
+  .wishes-caption { font-size: 9px; }
+  .wish-light { width: 48px; }
+  .wish-light-1 { left: 20%; top: 40%; }
+  .wish-light-2 { left: 73%; top: 55%; }
+  .wish-light-3 { left: 38%; top: 90%; }
+  .wish-light-4 { left: 12%; top: 78%; }
+  .wish-light-5 { left: 87%; top: 93%; }
+  .wish-light-text { font-size: 14px; }
+}

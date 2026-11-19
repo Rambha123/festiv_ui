@@ -78,11 +78,30 @@ describe("persistent journey validation", () => {
   });
 });
 
-import { frameAt, frames } from "./sequence";
-it("maps actual numeric sequence cues reversibly", () => {
-  expect(frames).toHaveLength(300);
-  expect(frames[0].name).toBe("ezgif-frame-001.jpg");
-  expect([0.16, 0.35, 0.52, 0.68, 0.94, 0.35].map(frameAt)).toEqual([
-    0, 74, 129, 174, 299, 74,
-  ]);
+import { openingDarkness } from "./lighting";
+import { alleyLamps } from "../data/alleyLamps";
+it("reveals the original artwork progressively and starts pitch black", () => {
+  expect(openingDarkness([], false)).toBe(1);
+  const levels = [0, 1, 2, 3, 4].map((n) => openingDarkness(["first", ...alleyLamps.slice(0, n).map((lamp) => lamp.id)], false));
+  expect(levels[0]).toBeLessThan(1);
+  expect(levels.at(-1)).toBe(0);
+  expect(levels.every((value, i) => i === 0 || value < levels[i - 1])).toBe(true);
+  expect(openingDarkness(["court-left"], false)).toBe(1);
+  expect(openingDarkness([], true)).toBeLessThan(1);
+});
+it("validates and restores all courtyard lamps and cultural discoveries", () => {
+  const lit = ["court-left", "court-right", "court-step-left", "court-step-right", "court-center"];
+  const discovered = ["light", "garlands", "architecture", "courtyard", "offerings"];
+  expect(parseSaved(JSON.stringify({ lit, discovered })).lit).toEqual(lit);
+  expect(parseSaved(JSON.stringify({ discovered })).discovered).toEqual(discovered);
+});
+it("toggles courtyard lamps reversibly and ignores unknown IDs", () => {
+  vi.stubGlobal("localStorage", { setItem: vi.fn() });
+  useJourney.setState({ lit: [] });
+  useJourney.getState().toggleLight("court-center");
+  expect(useJourney.getState().lit).toEqual(["court-center"]);
+  useJourney.getState().toggleLight("court-center");
+  useJourney.getState().light("unknown");
+  expect(useJourney.getState().lit).toEqual([]);
+  vi.unstubAllGlobals();
 });

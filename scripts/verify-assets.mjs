@@ -2,9 +2,12 @@ import { readFile, readdir } from "node:fs/promises";
 import { dirname, basename, join } from "node:path";
 import { createHash } from "node:crypto";
 const paths = [
-  "assets/environments/Unlit Basantapur Alley.png",
+  "assets/environments/Extinguished Diyas Beneath Temple Lights-1.png",
   "assets/environments/lit Basantapur Alley.png",
   "assets/environments/temple-courtyard.png",
+  "assets/environments/Before Dawn at the Quiet Riverbank.png",
+  "assets/environments/Worn River Steps Before Dawn.png",
+  "assets/environments/Quiet Sunrise on the Riverbank.png",
   "assets/objects/diya-unlit-frontfacing.png",
   "assets/objects/diya-unlit-sidefacing.png",
 ];
@@ -34,5 +37,5 @@ for (const path of paths) {
   }
 }
 console.log(
-  "All five original assets have exact casing and identical production bytes.",
+  `All ${paths.length} active artwork assets have exact casing and identical production bytes.`,
 );

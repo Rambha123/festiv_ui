@@ -18,6 +18,9 @@ const lampIds = [
   "alley-mid-right",
   "court-left",
   "court-right",
+  "court-step-left",
+  "court-step-right",
+  "court-center",
 ];
 export const openingState = (saved: SavedJourney): SavedJourney => ({
   ...saved,
@@ -39,7 +42,7 @@ export function parseSaved(raw: string | null): SavedJourney {
       ? value.discovered.filter(
           (id): id is string =>
             typeof id === "string" &&
-            ["light", "architecture", "courtyard"].includes(id),
+            ["light", "architecture", "courtyard", "garlands", "offerings", "riverbank", "riversteps"].includes(id),
         )
       : [],
     language: value.language === "ne" ? "ne" : "en",
@@ -58,6 +61,7 @@ try {
 interface Journey extends SavedJourney {
   storageError: string;
   light: (id: string) => void;
+  toggleLight: (id: string) => void;
   discover: (id: string) => void;
   setLanguage: (language: Language) => void;
   replay: () => void;
@@ -66,7 +70,11 @@ export const useJourney = create<Journey>((set) => ({
   ...initial,
   storageError,
   light: (id) =>
-    set((s) => ({ lit: s.lit.includes(id) ? s.lit : [...s.lit, id] })),
+    set((s) => ({ lit: !lampIds.includes(id) || s.lit.includes(id) ? s.lit : [...s.lit, id] })),
+  toggleLight: (id) => set((s) => ({
+    lit: !lampIds.includes(id) ? s.lit : s.lit.includes(id)
+      ? s.lit.filter((lamp) => lamp !== id) : [...s.lit, id],
+  })),
   discover: (id) =>
     set((s) => ({
       discovered: s.discovered.includes(id)

@@ -6,6 +6,9 @@ export const assets = {
   ),
   alley: url("assets/environments/lit Basantapur Alley.png"),
   courtyard: url("assets/environments/temple-courtyard.png"),
+  riverbank: url("assets/environments/Before Dawn at the Quiet Riverbank.png"),
+  riverSteps: url("assets/environments/Worn River Steps Before Dawn.png"),
+  sunrise: url("assets/environments/Quiet Sunrise on the Riverbank.png"),
   front: url("assets/objects/diya-unlit-frontfacing.png"),
   side: url("assets/objects/diya-unlit-sidefacing.png"),
 };
