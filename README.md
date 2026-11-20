@@ -110,3 +110,14 @@ Open http://127.0.0.1:3000. Wishes persist in `.data/wishes.json`; keep that fil
 - [x] Parsed request bodies, async storage, atomic publication and distributed cooldown supported.
 - [x] Missing database fails visibly; no ephemeral file fallback and no secrets in the browser.
 - [ ] Connect Upstash Redis to festiv-ui and redeploy, then verify live sharing. See [setup](docs/wishes.md#vercel-setup-for-festiv-ui).
+
+## November 20 mobile layout
+
+- [x] Added phone-specific typography, safe-area spacing, compact landscape opening, and a bounded scrolling chapter menu; desktop composition is preserved.
+- [x] Discovery panels become readable bottom sheets; wish actions precede the preview on phones, with a sticky close button and visual-viewport sizing for the software keyboard.
+- [x] Phone scene layers use `overflow: clip` so focusing controls cannot scroll the artwork/header inside the pinned viewport. Native page scrolling remains available.
+- [x] Added a touch-only courtyard swipe hint; retained existing horizontal exploration and object zoom.
+- [x] Browser viewport QA at 320×568, 390×844, 430×932 and 667×375: opening English/Nepali wrapping, chapter navigation, courtyard/river discovery, star selection and wish editor checked across these sizes. Confirmed no horizontal page overflow and zero inner scene scrolling after interactions. Desktop opening checked at 1440×900.
+- [x] ESLint, typecheck, all 33 tests and production build pass.
+- [ ] Physical iOS/Android keyboard, browser-toolbar and touch-gesture testing remains to be done; desktop viewport checks do not emulate these device behaviors.
+- [ ] Redeploy this revision to apply the mobile fixes to the public Vercel site.

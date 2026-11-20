@@ -1,0 +1,139 @@
+/* Phone layouts are kept separate from the desktop scene composition. */
+@media (max-width: 700px), (max-height: 500px) and (pointer: coarse) {
+  /* Unlike hidden, clip cannot scroll a pinned scene when a child gets focus. */
+  .scene-viewport, .courtyard-scene, .journey-still { overflow: clip; }
+  .scene-viewport {
+    --phone-left: max(16px, env(safe-area-inset-left));
+    --phone-right: max(16px, env(safe-area-inset-right));
+    --phone-top: max(12px, env(safe-area-inset-top));
+    --phone-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  header {
+    padding: var(--phone-top) var(--phone-right) 0 var(--phone-left);
+    gap: 12px;
+    align-items: center;
+  }
+  .wordmark { font-size: 14px; letter-spacing: .2em; flex-shrink: 0; }
+  header nav { gap: 2px; min-width: 0; }
+  header button { min-width: 44px; padding: 8px; font-size: 12px; }
+  header button span { margin-left: 6px; }
+
+  .chapter-map {
+    top: calc(var(--phone-top) + 52px);
+    right: var(--phone-right);
+    left: var(--phone-left);
+    max-height: calc(100svh - var(--phone-top) - var(--phone-bottom) - 64px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .chapter-map button { min-width: 0; overflow-wrap: anywhere; }
+
+  .opening {
+    padding: calc(var(--phone-top) + 62px) var(--phone-right) calc(var(--phone-bottom) + 58px) var(--phone-left);
+    gap: clamp(8px, 2svh, 20px);
+  }
+  .opening .intro-copy h1 {
+    font-size: clamp(28px, 9vw, 60px);
+    letter-spacing: .12em;
+    padding-left: .12em;
+    margin: 12px 0;
+  }
+  .opening .intro-copy p { font-size: clamp(16px, 4.5vw, 22px); line-height: 1.4; }
+  .opening .opening-narrative { font-size: clamp(14px, 3.8vw, 18px); line-height: 1.55; margin-top: 16px; }
+  .opening .opening-diya { width: clamp(76px, 15svh, 130px); }
+  .opening .ignite-instruction { width: min(280px, 84vw); font-size: 11px; }
+  .eyebrow { line-height: 1.6; }
+
+  footer { left: var(--phone-left); right: var(--phone-right); bottom: var(--phone-bottom); gap: 16px; font-size: 9px; }
+  footer > span:first-child { max-width: 45%; line-height: 1.5; }
+  footer > span:last-child { max-width: 50%; text-align: right; line-height: 1.5; }
+  footer b { display: block; margin: 3px 0 0; }
+
+  .narrative {
+    width: calc(100% - var(--phone-left) - var(--phone-right));
+    bottom: calc(var(--phone-bottom) + 70px);
+    padding: 12px 4px;
+  }
+  .narrative p { font-size: clamp(20px, 5.5vw, 28px); line-height: 1.35; margin: 12px 0; }
+  .narrative small { font-size: 12px; line-height: 1.5; }
+  .finale-actions { flex-wrap: wrap; gap: 4px 12px; }
+  .finale-actions button { margin: 4px 0 0; }
+  .distant-wishes { inset: calc(var(--phone-top) + 72px) 8% 55%; }
+  .wishes-caption { font-size: 9px; line-height: 1.6; letter-spacing: .12em; }
+  .wish-garden-status { top: 25%; font-size: 12px; }
+  .river-hotspot { left: 8%; right: 8%; width: 84%; bottom: 18%; }
+
+  .discovery-card.object-discovery,
+  .discovery-card.wish-editor {
+    position: fixed;
+    left: max(12px, env(safe-area-inset-left));
+    right: max(12px, env(safe-area-inset-right));
+    width: auto;
+    top: auto;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    max-height: min(52svh, calc(100svh - 80px));
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    scroll-padding-block: 48px 20px;
+    border-radius: 8px;
+  }
+  .discovery-card > .close {
+    position: sticky;
+    top: 0;
+    float: right;
+    z-index: 2;
+    min-width: 44px;
+    margin: -12px -12px 0 8px;
+    background: #101528;
+    border-radius: 50%;
+  }
+  .discovery-card h2 { font-size: clamp(26px, 7vw, 34px); line-height: 1.15; margin: 14px 0; }
+  .discovery-card p { font-size: 14px; line-height: 1.65; }
+  .object-discovery .discovery-note { font-size: 11px; }
+  .discovery-card.wish-editor {
+    top: max(var(--wish-top, 8px), env(safe-area-inset-top));
+    bottom: auto;
+    max-height: calc(var(--wish-height, 100dvh - 16px) - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+  }
+  .wish-editor > * { flex-shrink: 0; }
+  .wish-editor > .close { align-self: flex-end; margin-bottom: -26px; }
+  .wish-editor h2 { padding-right: 34px; }
+  .wish-editor label { margin-top: 8px; font-size: 14px; }
+  .wish-editor textarea { height: 100px; min-height: 80px; resize: vertical; font-size: 16px; }
+  .wish-preview { order: 2; aspect-ratio: auto; min-height: 150px; padding: 16px; margin-bottom: 0; }
+  .wish-preview p { margin: 0; }
+  .wish-preview small { margin-top: 12px; }
+  .wish-actions { gap: 8px; }
+  .wish-actions button { flex-basis: 100%; font-size: 13px; }
+}
+
+@media (max-width: 700px) and (max-height: 650px) {
+  .opening { gap: 8px; }
+  .opening .intro-copy h1 { font-size: clamp(28px, 9vw, 44px); margin: 6px 0; }
+  .opening .intro-copy p { font-size: 16px; margin: 8px 0; }
+  .opening .opening-narrative { font-size: 14px; margin-top: 10px; }
+  .opening .opening-diya { width: 72px; }
+  .narrative p { font-size: 20px; }
+  .narrative { bottom: calc(var(--phone-bottom) + 50px); }
+}
+
+@media (max-height: 500px) and (orientation: landscape) and (max-width: 1000px) {
+  .opening { flex-direction: row; gap: 5vw; padding: 68px max(24px, env(safe-area-inset-right)) 58px max(24px, env(safe-area-inset-left)); }
+  .opening .intro-scroll { width: 65%; }
+  .opening .intro-copy h1 { font-size: clamp(28px, 9svh, 42px); margin: 6px 0; }
+  .opening .intro-copy p { font-size: 16px; margin: 6px 0; }
+  .opening .opening-narrative { font-size: 13px; margin-top: 8px; }
+  .opening .opening-diya { width: 78px; }
+  .opening .ignite-instruction { width: 160px; font-size: 10px; }
+  .narrative { width: min(68%, 560px); bottom: 48px; padding: 0; }
+  .narrative p { font-size: 19px; margin: 8px 0; }
+  .distant-wishes { inset: 75px 8% 47%; }
+  .wishes-caption { display: none; }
+  .chapter-map { top: 64px; max-height: calc(100svh - 80px); overflow-y: auto; overscroll-behavior: contain; }
+  .discovery-card.object-discovery { top: 70px; bottom: 12px; max-height: calc(100svh - 82px); left: auto; right: max(12px, env(safe-area-inset-right)); width: 43%; }
+}

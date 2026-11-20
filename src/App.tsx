@@ -140,7 +140,7 @@ export default function App() {
             return <section key={i} className={`narrative narrative-${i}`} inert={chapter !== i} aria-hidden={chapter !== i}>
               <span className="eyebrow">{ne ? chapters[i].ne : chapters[i].name}</span>
               <p>{line[ne ? 1 : 0]}</p>
-              {i === 2 && <small>{ne ? "दियो वा फूल छुनुहोस्, कथा पत्ता लगाउनुहोस्।" : "Touch a lamp, a garland, a quiet detail."}</small>}
+              {i === 2 && <small><span className="pointer-hint">{ne ? "दियो वा फूल छुनुहोस्, कथा पत्ता लगाउनुहोस्।" : "Touch a lamp, a garland, a quiet detail."}</span><span className="touch-hint">{ne ? "वरिपरि हेर्न दायाँबायाँ स्वाइप गर्नुहोस् · दियो छुनुहोस्" : "Swipe sideways to explore · tap a light."}</span></small>}
               {i === 5 && <div className="finale-actions">
                 <button onClick={() => { setSelectedWish(null); setWishOpen(true); }}>{ne ? "कामना लेख्नुहोस्" : "Write a wish"} <span aria-hidden="true">↗</span></button>
                 <button className="text-button" onClick={restart}>{ne ? "फेरि यात्रा गर्नुहोस्" : "Walk again"}</button>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { assets } from "../engine/sceneManifest";
 import { publishWish } from "../engine/wishes";
+import { useWishViewport } from "../hooks/useWishViewport";
 import "./wishes.css";
 export function WishEditor({
   ne,
@@ -24,9 +25,15 @@ export function WishEditor({
   const publication = useRef<{ text: string; id: string } | null>(null);
   const pending = useRef<AbortController | null>(null);
   const input = useRef<HTMLTextAreaElement>(null);
+  const sheet = useRef<HTMLElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  useWishViewport(sheet);
   useEffect(() => {
     const previous = document.activeElement;
-    input.current?.focus({ preventScroll: true });
+    // Let phone visitors open the keyboard deliberately, after seeing the form.
+    const target = window.matchMedia("(max-width: 700px), (max-height: 500px) and (pointer: coarse)").matches
+      ? closeButton.current : input.current;
+    target?.focus({ preventScroll: true });
     return () => {
       pending.current?.abort();
       if (previous instanceof HTMLElement)
@@ -148,6 +155,7 @@ export function WishEditor({
   };
   return (
     <aside
+      ref={sheet}
       className="discovery-card wish-editor"
       aria-label={ne ? "कामना लेख्नुहोस्" : "Write a wish"}
       onKeyDown={(e) => {
@@ -155,6 +163,7 @@ export function WishEditor({
       }}
     >
       <button
+        ref={closeButton}
         className="close"
         onClick={onClose}
         aria-label={ne ? "बन्द गर्नुहोस्" : "Close wish"}
